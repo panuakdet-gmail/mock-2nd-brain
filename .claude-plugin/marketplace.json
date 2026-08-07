@@ -1,6 +1,6 @@
 {
-  "name": "llm-wiki-skills",
-  "id": "llm-wiki-skills",
+  "name": "mock-2nd-brain",
+  "id": "mock-2nd-brain",
   "owner": {
     "name": "Panuakdet Suwannatat"
   },
@@ -10,7 +10,7 @@
   },
   "plugins": [
     {
-      "name": "llm-wiki",
+      "name": "mock-2nd-brain",
       "source": "./",
       "description": "Turn a folder of documents into a cross-linked Obsidian knowledge base, then export it as a static website",
       "version": "1.0.0",

@@ -50,10 +50,10 @@ Easiest, and no terminal required. Open Claude Code and paste this:
 
 ```
 Please install the LLM Wiki skills for me from this marketplace:
-https://github.com/panuakdet-gmail/llm-wiki-skills
+https://github.com/panuakdet-gmail/mock-2nd-brain
 
-Add it as a plugin marketplace, install the "llm-wiki" plugin from it, then tell
-me the two commands it gives me and what each one does.
+Add it as a plugin marketplace, install the "mock-2nd-brain" plugin from it, then
+tell me the two commands it gives me and what each one does.
 ```
 
 Claude Code will ask permission before changing anything. When it's finished,
@@ -64,8 +64,8 @@ type `/` and you should see `/mock-wikify` in the list.
 If you'd rather run them yourself, inside Claude Code:
 
 ```
-/plugin marketplace add panuakdet-gmail/llm-wiki-skills
-/plugin install llm-wiki@llm-wiki-skills
+/plugin marketplace add panuakdet-gmail/mock-2nd-brain
+/plugin install mock-2nd-brain@mock-2nd-brain
 ```
 
 Installing this way means `/plugin` can update the skills for you later.
@@ -75,9 +75,9 @@ Installing this way means `/plugin` can update the skills for you later.
 No plugin system involved. In a terminal:
 
 ```bash
-git clone https://github.com/panuakdet-gmail/llm-wiki-skills.git
-cp -r llm-wiki-skills/skills/mock-wikify ~/.claude/skills/
-cp -r llm-wiki-skills/skills/mock-export-wiki-as-html ~/.claude/skills/
+git clone https://github.com/panuakdet-gmail/mock-2nd-brain.git
+cp -r mock-2nd-brain/skills/mock-wikify ~/.claude/skills/
+cp -r mock-2nd-brain/skills/mock-export-wiki-as-html ~/.claude/skills/
 ```
 
 Restart Claude Code. To update later, pull the repo and copy again.
