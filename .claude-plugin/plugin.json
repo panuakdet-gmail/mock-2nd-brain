@@ -1,5 +1,5 @@
 {
-  "name": "llm-wiki",
+  "name": "mock-2nd-brain",
   "description": "Turn a folder of documents into a cross-linked Obsidian knowledge base that Claude maintains for you, then export it as a browsable static website. Implements Andrej Karpathy's LLM Wiki pattern.",
   "version": "1.0.0",
   "author": {

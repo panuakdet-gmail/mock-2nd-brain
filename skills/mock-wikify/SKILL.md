@@ -4,7 +4,7 @@ description: >-
   Bootstrap the current folder into an Obsidian "LLM-wiki" — a structured,
   interlinked markdown knowledge base built from source documents, following
   Andrej Karpathy's LLM Wiki pattern. It scaffolds the vault (raw/, wiki/ with
-  topic subfolders, a tailored CLAUDE.md, index.md, log.md, a Dracula
+  topic subfolders, tailored rule files AGENTS.md / GEMINI.md / CLAUDE.md, index.md, log.md, a Dracula
   Obsidian theme, and a CSS snippet that stops Obsidian striking through
   completed checklist items), then ingests the source documents into cross-linked starter
   pages in one full-build run. Content pages are numbered (01-, 02-…) for
@@ -18,7 +18,7 @@ description: >-
 
 # mock-wikify
 
-Turn a folder of source documents into a maintained LLM-wiki: a clean Obsidian vault where Claude ingests `raw/` sources into interlinked `wiki/` pages and keeps an index + operations log. This skill does the **first full build** — scaffold, confirm intent, ingest — and leaves behind a `CLAUDE.md` so the vault stays self-maintaining afterward.
+Turn a folder of source documents into a maintained LLM-wiki: a clean Obsidian vault where the agent ingests `raw/` sources into interlinked `wiki/` pages and keeps an index + operations log. This skill does the **first full build** — scaffold, confirm intent, ingest — and leaves behind `AGENTS.md` (and `GEMINI.md` / `CLAUDE.md`) so the vault stays self-maintaining afterward.
 
 ## Argument convention
 
@@ -41,7 +41,7 @@ The target is the cwd. Find the source documents, in this order:
 
 **If the sources come from outside `raw/`** (the argument's location, or loose files in the cwd), ask the user whether to **copy them into `raw/`** or **read them in place**. Respect the answer for the rest of the run.
 
-If no sources are found anywhere, say so and offer a **purpose-only scaffold** (structure + CLAUDE.md + empty index/log + empty `raw-gist/`, no ingest).
+If no sources are found anywhere, say so and offer a **purpose-only scaffold** (structure + AGENTS.md + empty index/log + empty `raw-gist/`, no ingest).
 
 ### 2. Infer the purpose
 
@@ -49,12 +49,12 @@ If the argument supplied a purpose, use it. Otherwise read or skim enough of the
 
 ### 3. Confirm purpose and taxonomy via multiple choice
 
-Use **AskUserQuestion** — this is the user's preferred way to confirm intent.
+Use **ask_question** (or **AskUserQuestion** in Claude Code) — this is the user's preferred way to confirm intent.
 
-- **Purpose question:** offer 2–4 Claude-formulated candidate purposes, the best guess first and labeled "(Recommended)". These must be real interpretations of the documents, not placeholders — the user picks or refines rather than typing from scratch.
+- **Purpose question:** offer 2–4 candidate purposes, the best guess first and labeled "(Recommended)". These must be real interpretations of the documents, not placeholders — the user picks or refines rather than typing from scratch.
 - **Taxonomy question:** propose the set of `wiki/` **topic subfolders**, derived from what the documents actually contain (not a fixed list). Different corpora need different buckets — meetings/people/decisions for an organization, concepts/methods/sources for a research base, etc. Let the user confirm or adjust.
 
-You can ask both in one AskUserQuestion call (two questions). Keep `index.md` and `log.md` pinned at the `wiki/` root regardless of taxonomy.
+You can ask both in one call (two questions). Keep `index.md` and `log.md` pinned at the `wiki/` root regardless of taxonomy.
 
 Once the taxonomy is confirmed, **judge whether the topic subfolders form a progression or are peers** — this decides folder numbering (see step 4). If the topics have a natural order a reader would follow (e.g. setup → usage → reference, or a learning path), they are a **sequence**; if they are co-equal buckets with no canonical order (people / decisions / meetings), they are **peers**. When it's a genuine judgment call, ask the user briefly rather than guessing.
 
@@ -65,7 +65,7 @@ Create, in the cwd:
 - `raw/` — the source documents (copied in, or referenced in place per step 1).
 - `raw-gist/` — one small gist card per source file (per step 6 / the gist template below). Mirrors `raw/` one-to-one.
 - `wiki/` — with `index.md` and `log.md` at its root, plus the confirmed topic subfolders. **Number the topic subfolders only if they form a sequence** (per the step-3 judgment): a progression gets a two-digit prefix in reading order (`01-setup/`, `02-usage/`, …); peer buckets stay unnumbered (alphabetical). Folders never appear in `[[wiki-links]]`, so numbering them carries no link-breakage risk — it's purely for file-list ordering. **Never number `raw/`, `raw-gist/`, or `.obsidian/`** — they're infrastructure, not reading-order content.
-- `CLAUDE.md` — generated per step 5.
+- `AGENTS.md` (plus `GEMINI.md` and `CLAUDE.md` for multi-assistant compatibility) — generated per step 5.
 - `.obsidian/` — appearance config: a theme (only if none is set yet) plus the completed-checklist CSS snippet (always). If the vault has **no theme set yet**, install the **"Dracula for Obsidian"** theme (by jarodise). The location is confirmed and baked in — do **not** search for it:
   1. Create `.obsidian/themes/Dracula for Obsidian/theme.css` from the canonical CSS at `https://raw.githubusercontent.com/jarodise/Dracula-for-Obsidian.md/master/obsidian.css`. (Fallback if offline: copy `theme.css` from another vault on this machine that already has this theme.)
   2. Create `.obsidian/themes/Dracula for Obsidian/manifest.json` (the upstream repo ships none, so generate it):
@@ -102,9 +102,9 @@ Create, in the cwd:
 
   **If the snippet file already exists, leave it untouched** — but still check that it is listed in `enabledCssSnippets`, since an unenabled snippet is a silent no-op.
 
-### 5. Generate `CLAUDE.md`
+### 5. Generate `AGENTS.md` (and `GEMINI.md` / `CLAUDE.md`)
 
-Write a `CLAUDE.md` adapted to the confirmed purpose and taxonomy, carrying over these sections (this is the reusable LLM-wiki contract — keep the wording close so the vault behaves consistently):
+Write `AGENTS.md` (and replicate/link to `GEMINI.md` and `CLAUDE.md` for full cross-compatibility) adapted to the confirmed purpose and taxonomy, carrying over these sections (this is the reusable LLM-wiki contract — keep the wording close so the vault behaves consistently):
 
 - **Purpose** — filled from the confirmed purpose.
 - **Folder structure** — the confirmed subfolders, with `index.md`/`log.md` at `wiki/` root, plus `raw/` and `raw-gist/` at the vault root. Note that Obsidian `[[wiki-links]]` resolve by page name across folders, so **page names must be unique across the vault**. Content pages carry a two-digit reading-order prefix in the filename (`NN-slug.md`, e.g. `01-…`, `02-…`) so Obsidian's file list sorts in intended reading order, and each declares a YAML `aliases: [slug]` entry (the un-prefixed slug) as a link fallback. Numbering runs **within each subfolder** (that topic's reading order); slugs stay unique vault-wide. `index.md` and `log.md` are unnumbered and pinned at the `wiki/` root. The **topic subfolders themselves** are numbered (`01-setup/`, `02-usage/`, …) only when they form a reading progression; peer-category buckets stay unnumbered. Keep this consistent when adding folders: if the vault's existing topic folders are numbered, a new one takes the next number in the sequence (or slots in with a renumber); if they're unnumbered peers, leave the new one unnumbered too. `raw/`, `raw-gist/`, and `.obsidian/` are never numbered. Folders don't appear in `[[wiki-links]]`, so renaming or renumbering a folder breaks no links.
@@ -173,7 +173,7 @@ Write a `CLAUDE.md` adapted to the confirmed purpose and taxonomy, carrying over
 
 ### 6. Ingest — full build
 
-For each source document, extract its key facts and create or update the relevant page in the right subfolder. Every page follows the page-format template and the **no-hard-wrap** rule, and is **densely cross-linked** with `[[wiki-links]]` to related pages. Give each page a two-digit reading-order number within its subfolder (`NN-slug.md`) and an `aliases: [slug]` front-matter entry, and link between pages with the `[[NN-slug|slug]]` form (see the page-format rules in the generated `CLAUDE.md`). Copy proper nouns grapheme-for-grapheme from the source. Where two sources disagree, **flag the discrepancy on the page rather than silently picking one**.
+For each source document, extract its key facts and create or update the relevant page in the right subfolder. Every page follows the page-format template and the **no-hard-wrap** rule, and is **densely cross-linked** with `[[wiki-links]]` to related pages. Give each page a two-digit reading-order number within its subfolder (`NN-slug.md`) and an `aliases: [slug]` front-matter entry, and link between pages with the `[[NN-slug|slug]]` form (see the page-format rules in the generated rule files). Copy proper nouns grapheme-for-grapheme from the source. Where two sources disagree, **flag the discrepancy on the page rather than silently picking one**.
 
 **Then, for that same source, write its gist** to `raw-gist/` (see below). This is automatic — gisting is part of ingesting, never a separate ask.
 
@@ -225,4 +225,4 @@ Summarize what was built (folders, page count, gist count, theme + snippet), lis
 
 - This is a **full build**: don't stop at a skeleton. After scaffolding, ingest the sources into real pages — and a gist per source into `raw-gist/` — in the same run.
 - Honor the user's global preferences (e.g. the Dracula theme) and never override an Obsidian theme the vault already has.
-- If the cwd already looks like a populated vault, don't clobber it — confirm with the user before overwriting an existing `CLAUDE.md` or pages.
+- If the cwd already looks like a populated vault, don't clobber it — confirm with the user before overwriting existing rules or pages.

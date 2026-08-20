@@ -43,12 +43,12 @@ Resolution rules it implements, which match the vault contract: a `[[link]]` res
 
 ### 1. Confirm scope before exporting
 
-Ask with **AskUserQuestion** — the answer changes what gets published, and `raw/` is frequently sensitive:
+Ask with **ask_question** (or **AskUserQuestion** in Claude Code) — the answer changes what gets published, and `raw/` is frequently sensitive:
 
 - **Scope** — `wiki/` only (the default and the safe answer); `wiki/` + `raw-gist/`; or everything including `raw/` source files as downloadable attachments.
 - **Repeatability** — install a re-runnable build script (default), or produce a one-time output folder.
 
-Default to **`wiki/` only**. The vault's `CLAUDE.md` usually marks `raw/` as internal working documents — unpublished drafts, personal data, speaker names, production notes. Exporting `raw/` puts all of that into a folder built for distribution. If the user asks for the wider scope, say what is in `raw/` in one sentence, then do it.
+Default to **`wiki/` only**. The vault's `AGENTS.md` / `GEMINI.md` / `CLAUDE.md` usually marks `raw/` as internal working documents — unpublished drafts, personal data, speaker names, production notes. Exporting `raw/` puts all of that into a folder built for distribution. If the user asks for the wider scope, say what is in `raw/` in one sentence, then do it.
 
 ### 2. Survey the markdown actually in use
 
@@ -161,7 +161,7 @@ Only if the user asks. The output is a plain static folder, so any static host w
 Two things to get right before pushing anything outward:
 
 - **Deploy the output folder, never the vault root.** Running a deploy CLI from the vault uploads `raw/` — often tens of MB of internal source documents. Run it from inside `html/`.
-- **Confirm visibility, and raise it yourself if the user does not.** If the vault's `CLAUDE.md` describes the sources as internal or unpublished, a public production URL is a real disclosure, and search engines index it. Offer access-protected and `noindex` options alongside fully public, and let the user choose before deploying.
+- **Confirm visibility, and raise it yourself if the user does not.** If the vault's `AGENTS.md` / `GEMINI.md` / `CLAUDE.md` describes the sources as internal or unpublished, a public production URL is a real disclosure, and search engines index it. Offer access-protected and `noindex` options alongside fully public, and let the user choose before deploying.
 
 CLI logins (`vercel login`, `gh auth login`, `netlify login`) are interactive and cannot be driven from a tool call — ask the user to run them in the session with the `!` prefix, e.g. `! vercel login`.
 
