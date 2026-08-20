@@ -1,19 +1,14 @@
 ---
 name: mock-wikify
 description: >-
-  Bootstrap the current folder into an Obsidian "LLM-wiki" — a structured,
-  interlinked markdown knowledge base built from source documents, following
-  Andrej Karpathy's LLM Wiki pattern. It scaffolds the vault (raw/, wiki/ with
-  topic subfolders, tailored rule files AGENTS.md / GEMINI.md / CLAUDE.md, index.md, log.md, a Dracula
-  Obsidian theme, and a CSS snippet that stops Obsidian striking through
-  completed checklist items), then ingests the source documents into cross-linked starter
-  pages in one full-build run. Content pages are numbered (01-, 02-…) for
-  reading order, with slug aliases so links stay stable. The wiki's PURPOSE is inferred from the documents
-  and confirmed with the user via multiple-choice; the user can also pass the
-  purpose as an argument. The target vault is always the current working
-  directory. Trigger on /mock-wikify and proactively whenever the user asks to
-  "turn this folder into a wiki", "wikify", "build an LLM wiki / knowledge base
-  from these docs", "make an Obsidian vault from these PDFs", or similar.
+  Turn a folder of source documents into a maintained Obsidian "LLM-wiki" — a
+  scaffolded vault of numbered, cross-linked markdown pages plus an index and
+  operations log, built in one full run, following Andrej Karpathy's LLM Wiki
+  pattern. Always targets the current working directory. MANUAL TRIGGER ONLY:
+  apply this skill only when the user invokes /mock-wikify. Never invoke it on
+  your own initiative — not for note-taking, documentation, or knowledge-base
+  work, and not when the user merely mentions wikis, Obsidian, or organizing
+  documents.
 ---
 
 # mock-wikify

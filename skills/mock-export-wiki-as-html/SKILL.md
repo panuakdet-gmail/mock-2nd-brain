@@ -1,17 +1,13 @@
 ---
 name: mock-export-wiki-as-html
 description: >-
-  Export an Obsidian LLM-wiki vault (the mock-wikify layout — raw/, raw-gist/,
-  wiki/ with numbered topic folders, NN-slug.md pages with aliases) into a
-  static HTML website: one page per note, a sidebar built from the topic
-  folders, resolved [[wiki-links]], in-page table of contents, prev/next
-  paging, light/dark themes, and a print stylesheet. Ships a dependency-free
-  Python exporter (stdlib only — no pandoc, no npm, no network) that is
-  installed into the vault as a re-runnable build script, plus a link/anchor
-  verification pass. Trigger on /mock-export-wiki-as-html and proactively
-  whenever the user asks to "export the wiki as html", "turn my vault into a
-  website", "make a static site from these notes", "publish the wiki",
-  "generate HTML from my Obsidian vault", or similar.
+  Export an Obsidian LLM-wiki vault (the mock-wikify layout) into a static HTML
+  website — one page per note, topic sidebar, resolved [[wiki-links]], light and
+  dark themes — via a dependency-free Python exporter installed into the vault
+  as a re-runnable build script. MANUAL TRIGGER ONLY: apply this skill only when
+  the user invokes /mock-export-wiki-as-html. Never invoke it on your own
+  initiative — not when the user talks about publishing notes, exporting a
+  vault, or building a site.
 ---
 
 # mock-export-wiki-as-html
