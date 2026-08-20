@@ -1,7 +1,11 @@
-# LLM Wiki skills for Claude Code
+# LLM Wiki skills for coding agents
 
-Two skills that turn a pile of documents into a knowledge base Claude maintains
-for you — and then, when you want to share it, into a website.
+Two skills that turn a pile of documents into a knowledge base your agent
+maintains for you — and then, when you want to share it, into a website.
+
+Built and tested on **Claude Code**, where they install as a plugin and run as
+slash commands. The instructions themselves are plain markdown with nothing
+Claude-specific in them, so other agents can follow them too.
 
 They implement the **LLM Wiki** pattern described by
 [Andrej Karpathy](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
@@ -10,10 +14,10 @@ The idea is his; this is one opinionated way of carrying it out. In his words:
 > Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase.
 
 The point of the pattern is that knowledge **compounds**. Rather than re-reading
-your source documents every time you ask a question, Claude reads them once,
-writes what it learned into linked pages, and keeps those pages current as you
-add more. Ask it something a month later and it answers from the pages, not from
-scratch.
+your source documents every time you ask a question, your agent reads them
+once, writes what it learned into linked pages, and keeps those pages current as
+you add more. Ask it something a month later and it answers from the pages, not
+from scratch.
 
 ---
 
@@ -29,7 +33,10 @@ doesn't mean anything.
 
 ## What you need
 
-1. **Claude Code**, installed and working.
+1. **A coding agent.** [Claude Code](https://claude.com/claude-code) is the
+   supported path — one command to install, and the two commands below appear
+   in its `/` menu. Codex, Antigravity, Gemini CLI and friends can install them
+   too — *Option 4* is a prompt that asks your agent to do it for you.
 2. **[Obsidian](https://obsidian.md)** — a free app for reading and editing
    folders of markdown files. You don't strictly need it (the wiki is ordinary
    text files, readable in any editor), but it's what makes the `[[links]]`
@@ -43,6 +50,8 @@ already include it.
 ---
 
 ## Installing
+
+Options 1–3 are Claude Code. Option 4 is everything else.
 
 ### Option 1 — ask Claude Code to do it
 
@@ -70,7 +79,7 @@ If you'd rather run them yourself, inside Claude Code:
 
 Installing this way means `/plugin` can update the skills for you later.
 
-### Option 3 — copy the folders by hand
+### Option 3 — copy the folders by hand (Claude Code)
 
 No plugin system involved. In a terminal:
 
@@ -82,14 +91,41 @@ cp -r mock-2nd-brain/skills/mock-export-wiki-as-html ~/.claude/skills/
 
 Restart Claude Code. To update later, pull the repo and copy again.
 
+### Option 4 — ask another agent to do it
+
+Same idea as Option 1, no terminal required. Open Codex, Antigravity, Gemini
+CLI, or whatever you use, and paste this:
+
+```
+Please install these two skills for me from GitHub:
+https://github.com/panuakdet-gmail/mock-2nd-brain
+
+They live in skills/mock-wikify/ and skills/mock-export-wiki-as-html/. Fetch
+them yourself — I'd rather not clone anything by hand.
+
+They were written for Claude Code, so the packaging won't match yours. Adapt it:
+register each one however this agent handles reusable commands or skills, so I
+can invoke them by name later. Leave the instructions inside each SKILL.md
+alone — only the packaging around them needs changing.
+
+When you're done, tell me how to invoke each one here.
+```
+
+Most agents will give you a slash command out of this, and from then on the two
+skills work the same as they do in Claude Code. If yours has no command system,
+it can still read `skills/mock-wikify/SKILL.md` and follow it directly — you
+name the file each time instead of typing a command, and the wiki that comes out
+is identical.
+
 ---
 
 ## Using it
 
-**Put your documents in a folder** and open Claude Code there. The folder you're
+**Put your documents in a folder** and open your agent there. The folder you're
 in *is* the wiki — the skill never builds somewhere else.
 
-**Run `/mock-wikify`.** It will:
+**Run `/mock-wikify`.** (On another agent, use whatever name Option 4 set up —
+everything below is the same either way.) It will:
 
 1. Read enough of your documents to work out what the collection is *for*.
 2. Ask you to confirm that purpose, and to approve the topic folders it proposes
@@ -109,7 +145,7 @@ Or point it at documents that live somewhere else:
 /mock-wikify notes for the design committee, docs in ~/Downloads/committee-pack
 ```
 
-**Then just talk to it.** Ask questions in that folder and Claude answers from
+**Then talk to it.** Ask questions in that folder and your agent answers from
 the pages it wrote. Add more documents later and ask it to ingest them; the wiki
 grows rather than being rebuilt.
 
@@ -130,16 +166,20 @@ your-folder/
 │   └── 01-topic/         your topic folders, holding the actual pages
 │       ├── 01-something.md
 │       └── 02-something-else.md
-├── CLAUDE.md             the rules that keep the vault consistent afterwards
+├── AGENTS.md             the rules that keep the vault consistent afterwards
+├── GEMINI.md             the same rules, under the names other agents read
+├── CLAUDE.md
 └── .obsidian/            theme and display settings
 ```
 
 Two details worth knowing:
 
-**`CLAUDE.md` is what makes it self-maintaining.** It's written to match your
-particular wiki — its purpose, its topics, its page format — and Claude reads it
-automatically in that folder from then on. That's why the wiki stays consistent
-long after the first build.
+**The rule files are what make it self-maintaining.** They're written to match
+your particular wiki — its purpose, its topics, its page format — and an agent
+reads them automatically when it opens that folder. That's why the wiki stays
+consistent long after the first build. The same rules are written three times
+because different agents look for different filenames: `AGENTS.md`, `GEMINI.md`,
+`CLAUDE.md`. Whichever you open the folder with, it knows the conventions.
 
 **Pages are numbered `01-`, `02-` so they sort in reading order,** and each one
 declares its plain name as an alias. So `[[01-trade-routes|trade-routes]]` and a
