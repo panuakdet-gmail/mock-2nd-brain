@@ -3,8 +3,7 @@
 Two skills that turn a pile of documents into a knowledge base your agent
 maintains for you — and then, when you want to share it, into a website.
 
-Built and tested on **Claude Code**, where they install as a plugin and run as
-slash commands. The instructions themselves are plain markdown with nothing
+Built and tested on **Claude Code**, where they run as slash commands. The instructions themselves are plain markdown with nothing
 Claude-specific in them, so other agents can follow them too.
 
 They implement the **LLM Wiki** pattern described by
@@ -34,9 +33,9 @@ doesn't mean anything.
 ## What you need
 
 1. **A coding agent.** [Claude Code](https://claude.com/claude-code) is the
-   supported path — one command to install, and the two commands below appear
-   in its `/` menu. Codex, Antigravity, Gemini CLI and friends can install them
-   too — *Option 4* is a prompt that asks your agent to do it for you.
+   supported path, and the two commands below appear in its `/` menu. Codex,
+   Antigravity, Gemini CLI and other agents can use them too: *Option 3* is a
+   prompt that asks your agent to install them for you.
 2. **[Obsidian](https://obsidian.md)** — a free app for reading and editing
    folders of markdown files. You don't strictly need it (the wiki is ordinary
    text files, readable in any editor), but it's what makes the `[[links]]`
@@ -51,37 +50,30 @@ already include it.
 
 ## Installing
 
-Options 1–3 are Claude Code. Option 4 is everything else.
+Options 1 and 2 are for Claude Code. Option 3 is for other agents. Pick one.
 
 ### Option 1 — ask Claude Code to do it
 
-Easiest, and no terminal required. Open Claude Code and paste this:
+This is the easiest way, and you do not need a terminal. Open Claude Code and paste this:
 
 ```
-Please install the LLM Wiki skills for me from this marketplace:
-https://github.com/panuakdet-gmail/mock-2nd-brain
+Please install the Claude Code skills from https://github.com/panuakdet-gmail/mock-2nd-brain.
 
-Add it as a plugin marketplace, install the "mock-2nd-brain" plugin from it, then
-tell me the two commands it gives me and what each one does.
+1. Download the repository, with its full history, to a temporary folder.
+2. For each folder inside its skills/ folder, look for a folder with the same name in ~/.claude/skills/.
+   - If there is none, copy the folder there.
+   - If there is one, and every file in it matches a version that was once published in this repository, replace it with the new version.
+   - If there is one, and it matches no published version, I have edited it. First move my copy to ~/.claude/skill-backups/<folder name>-<today's date>/. Then install the new version, show me what I had changed, and offer to merge my changes into it.
+3. Delete the temporary download and tell me what you installed or updated.
 ```
 
-Claude Code will ask permission before changing anything. When it's finished,
-type `/` and you should see `/mock-wikify` in the list.
+Claude Code asks your permission before it changes anything. When it has finished, restart Claude Code and type `/`. You should see `/mock-wikify` in the list.
 
-### Option 2 — the plugin commands
+**To update later**, paste the same prompt again. If you changed the skills yourself, your version is saved first and Claude Code offers to merge your changes into the new one.
 
-If you'd rather run them yourself, inside Claude Code:
+### Option 2 — copy the folders yourself
 
-```
-/plugin marketplace add panuakdet-gmail/mock-2nd-brain
-/plugin install mock-2nd-brain@mock-2nd-brain
-```
-
-Installing this way means `/plugin` can update the skills for you later.
-
-### Option 3 — copy the folders by hand (Claude Code)
-
-No plugin system involved. In a terminal:
+In a terminal:
 
 ```bash
 git clone https://github.com/panuakdet-gmail/mock-2nd-brain.git
@@ -89,12 +81,11 @@ cp -r mock-2nd-brain/skills/mock-wikify ~/.claude/skills/
 cp -r mock-2nd-brain/skills/mock-export-wiki-as-html ~/.claude/skills/
 ```
 
-Restart Claude Code. To update later, pull the repo and copy again.
+Then restart Claude Code. To update, run the same commands again. This replaces the old folders, so any changes you made to them are lost.
 
-### Option 4 — ask another agent to do it
+### Option 3 — ask another agent to do it
 
-Same idea as Option 1, no terminal required. Open Codex, Antigravity, Gemini
-CLI, or whatever you use, and paste this:
+Open Codex, Antigravity, Gemini CLI, or whatever agent you use, and paste this:
 
 ```
 Please install these two skills for me from GitHub:
@@ -111,11 +102,16 @@ alone — only the packaging around them needs changing.
 When you're done, tell me how to invoke each one here.
 ```
 
-Most agents will give you a slash command out of this, and from then on the two
-skills work the same as they do in Claude Code. If yours has no command system,
-it can still read `skills/mock-wikify/SKILL.md` and follow it directly — you
-name the file each time instead of typing a command, and the wiki that comes out
-is identical.
+Most agents turn each skill into a slash command. If yours has no command system, it can still read `skills/mock-wikify/SKILL.md` and follow it. You name the file each time instead of typing a command, and the wiki it builds is the same.
+
+### If you installed the old plugin version
+
+This repository used to be a Claude Code plugin. That version no longer updates. Remove it before you use Option 1 or 2, otherwise every command appears twice. Inside Claude Code, run:
+
+```
+/plugin uninstall mock-2nd-brain@mock-2nd-brain
+/plugin marketplace remove mock-2nd-brain
+```
 
 ---
 
@@ -124,7 +120,7 @@ is identical.
 **Put your documents in a folder** and open your agent there. The folder you're
 in *is* the wiki — the skill never builds somewhere else.
 
-**Run `/mock-wikify`.** (On another agent, use whatever name Option 4 set up —
+**Run `/mock-wikify`.** (On another agent, use whatever name Option 3 set up —
 everything below is the same either way.) It will:
 
 1. Read enough of your documents to work out what the collection is *for*.
