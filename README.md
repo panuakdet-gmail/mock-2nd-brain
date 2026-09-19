@@ -88,21 +88,21 @@ Then restart Claude Code. To update, run the same commands again. This replaces 
 Open Codex, Antigravity, Gemini CLI, or whatever agent you use, and paste this:
 
 ```
-Please install these two skills for me from GitHub:
-https://github.com/panuakdet-gmail/mock-2nd-brain
+Please install the skills from https://github.com/panuakdet-gmail/mock-2nd-brain for this agent.
 
-They live in skills/mock-wikify/ and skills/mock-export-wiki-as-html/. Fetch
-them yourself — I'd rather not clone anything by hand.
-
-They were written for Claude Code, so the packaging won't match yours. Adapt it:
-register each one however this agent handles reusable commands or skills, so I
-can invoke them by name later. Leave the instructions inside each SKILL.md
-alone — only the packaging around them needs changing.
-
-When you're done, tell me how to invoke each one here.
+1. Download the repository, with its full history, to a temporary folder.
+2. Each folder inside its skills/ folder is one skill. Install each folder whole, including subfolders such as assets/, because the instructions use those files.
+3. The skills were written for Claude Code, so adapt only the packaging: register each one the way this agent handles reusable skills or commands, so I can run it by name. Do not change the instructions inside each SKILL.md.
+4. Before you install each skill, check whether I already have it.
+   - If I do not, install it.
+   - If I do, and its files match a version that was once published in this repository, replace it with the new version. Ignore packaging changes that an agent made when it installed the skill.
+   - If I do, and it matches no published version, I have edited it. First copy my version to a backup folder outside the place this agent loads skills from, and tell me where it is. Then install the new version, show me what I had changed, and offer to merge my changes into it.
+5. Delete the temporary download. Then tell me what you installed or updated, and how to run each skill here.
 ```
 
 Most agents turn each skill into a slash command. If yours has no command system, it can still read `skills/mock-wikify/SKILL.md` and follow it. You name the file each time instead of typing a command, and the wiki it builds is the same.
+
+**To update later**, paste the same prompt again. If you changed the skills yourself, your version is saved first.
 
 ### If you installed the old plugin version
 
