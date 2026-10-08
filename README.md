@@ -1,7 +1,8 @@
 # LLM Wiki skills for coding agents
 
-Two skills that turn a pile of documents into a knowledge base your agent
-maintains for you — and then, when you want to share it, into a website.
+Three skills. Two turn a pile of documents into a knowledge base your agent
+maintains for you — and then, when you want to share it, into a website. The
+third uses both to prepare you to defend a document in a meeting.
 
 Built and tested on **Claude Code**, where they run as slash commands. The instructions themselves are plain markdown with nothing
 Claude-specific in them, so other agents can follow them too.
@@ -20,12 +21,13 @@ from scratch.
 
 ---
 
-## The two skills
+## The three skills
 
 | Command | What it does |
 |---|---|
 | `/mock-wikify` | Reads the documents in a folder and builds the wiki: topic folders, cross-linked pages, an index, a change log, and a one-card summary of every source |
 | `/mock-export-wiki-as-html` | Turns that wiki into a static website — sidebar, working links, table of contents, light and dark themes, print stylesheet |
+| `/mock-prep-hearing` | Prepares you to answer questions about a document you wrote, such as a curriculum, a framework or a policy paper. It builds the wiki, writes the hard questions with ready answers that cite exact PDF pages, and exports the site |
 
 The `mock-` prefix is just a namespace to keep these apart from other skills; it
 doesn't mean anything.
@@ -33,7 +35,7 @@ doesn't mean anything.
 ## What you need
 
 1. **A coding agent.** [Claude Code](https://claude.com/claude-code) is the
-   supported path, and the two commands below appear in its `/` menu. Codex,
+   supported path, and the three commands below appear in its `/` menu. Codex,
    Antigravity, Gemini CLI and other agents can use them too: *Option 3* is a
    prompt that asks your agent to install them for you.
 2. **[Obsidian](https://obsidian.md)** — a free app for reading and editing
@@ -45,6 +47,16 @@ doesn't mean anything.
 
 Python 3 is needed only for the website export, and macOS and most Linux systems
 already include it.
+
+`/mock-prep-hearing` was written for Claude Code and needs a little more:
+
+- **A PDF of your document.** Page numbers are taken from it.
+- **[Poppler](https://poppler.freedesktop.org)**, a free set of PDF tools. The
+  skill uses two of them, `pdfinfo` and `pdftotext`. On a Mac with
+  [Homebrew](https://brew.sh), install it with `brew install poppler`.
+- **A [Vercel](https://vercel.com) account and its command-line tool**, only if
+  you ask the skill to put the site online behind a password. Vercel is a
+  company that hosts websites.
 
 ---
 
@@ -79,6 +91,7 @@ In a terminal:
 git clone https://github.com/panuakdet-gmail/mock-2nd-brain.git
 cp -r mock-2nd-brain/skills/mock-wikify ~/.claude/skills/
 cp -r mock-2nd-brain/skills/mock-export-wiki-as-html ~/.claude/skills/
+cp -r mock-2nd-brain/skills/mock-prep-hearing ~/.claude/skills/
 ```
 
 Then restart Claude Code. To update, run the same commands again. This replaces the old folders, so any changes you made to them are lost.
@@ -147,6 +160,57 @@ grows rather than being rebuilt.
 
 **When you want to share it**, run `/mock-export-wiki-as-html` and you get a
 folder of web pages you can open in a browser or upload anywhere.
+
+---
+
+## Preparing for a hearing
+
+Use `/mock-prep-hearing` when you must answer questions about a document in
+front of other people: a public hearing, a review committee, a board meeting.
+
+**Put the document in a folder**, as a PDF. Add the meeting schedule or
+invitation, and any minutes or comments from earlier reviews if you have them.
+Open Claude Code in that folder.
+
+**Type `/mock-prep-hearing`.** This is the only command you need to remember.
+Each time you type it, it does the next stage and then stops so you can check
+the result:
+
+1. **Summary.** It reads the meeting papers, shows you its settings to confirm,
+   and builds the wiki. Every page says which PDF pages it came from.
+2. **Prep.** It writes the questions a sharp person in the room would ask, each
+   with a short answer, the evidence, what to concede if pressed, and whether to
+   accept the point. It then checks every fact and every page number against
+   the PDF. It also creates `/ask`, described below.
+3. **Export.** It builds the website, with a confidentiality warning on every
+   page.
+
+After each stage it prints a short map of where you are and what to type next.
+
+**Page numbers are written `X(Y)`** when a PDF's page count and its printed
+page numbers differ. X is the page's position in the file, which is what a PDF
+reader's "go to page" box takes. Y is the number printed on the page. So you
+can tell the room exactly where to look.
+
+**During the meeting, type `/ask` and the question you just heard.** You get a
+short answer to say aloud, the section and page that support it, and the wiki
+page to open. `/ask` is created inside your folder and knows only that
+document.
+
+**The settings it shows you at the start**, any of which you can change:
+
+- It defends the document with evidence, and resists additions that widen its
+  scope.
+- It writes the wiki in the document's own language.
+- It treats the document as confidential. Nothing is uploaded anywhere.
+- It keeps a log of everything you type in that folder, in `PROMPT_LOG.md`, so
+  the questions you heard are not lost.
+
+**Putting the site online is optional and happens only if you type
+`/mock-prep-hearing publish`.** The site then sits behind one shared username
+and password, and the skill asks you to confirm before it uploads anything. A
+password-protected site is still on the internet, so think before you use this
+for a confidential document.
 
 ---
 
