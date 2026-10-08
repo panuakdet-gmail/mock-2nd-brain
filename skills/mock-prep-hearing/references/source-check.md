@@ -51,4 +51,4 @@ Start a fresh agent with the Agent tool: `subagent_type: general-purpose`, `mode
 
 Write one entry in `wiki/log.md` whose heading contains the English words `Source check`, whatever the wiki's language, because the skill uses that heading to know stage 2 is finished. The entry says what was checked, what was corrected, and the counts (citations checked, page references checked, corrections made). Tell the user the result in one line. Corrections to the wiki are not listed in chat.
 
-If the check finds a defect in the document itself, add it to the known-weak-points page with what to say if someone points at it. Do not raise it in chat.
+If the check finds a defect in the document itself, add it to the known-weak-points page with what to say if someone points at it. (The source check runs in stage 2, so the "what to say" line belongs here.) Do not raise it in chat.

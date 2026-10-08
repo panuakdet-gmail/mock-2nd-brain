@@ -15,7 +15,7 @@ description: >-
 
 # mock-prep-hearing
 
-The user must answer questions in a meeting about a document they wrote or co-wrote. This skill builds what they use during it: a wiki where one page answers one question, prepared answers to the hard questions, and an exact PDF page for every claim.
+The user must answer questions in a meeting about a document they wrote or co-wrote. This skill builds what they use during it: a wiki that summarises the document one topic per page, prepared answers to the hard questions, and an exact PDF page for every claim.
 
 It works in three stages. **Each stage ends with a stop**, because the user reviews the wiki before the next stage builds on it.
 
@@ -160,9 +160,12 @@ Invoke it with the confirmed purpose and source location as its argument, then f
 - **Pages are written by subagents**, as set out under "Subagents and models", unless the user turned them off.
 - **Folders follow the document's own chapters**, numbered in reading order. Three things are fixed whatever the document is:
   - a first folder of foundations that opens with a **one-page overview** holding every headline number and structure;
-  - a **reference folder** holding a glossary, the **section-to-page map**, and a **known-weak-points page** (errors, inconsistencies and gaps in the document itself, each with what to say if someone points at it);
+  - a **reference folder** holding a glossary, the **section-to-page map**, and a **known-weak-points page** (errors, inconsistencies and gaps in the document itself, each stated with its page; what to say about each is added in stage 2);
   - the **last folder number is kept for hearing prep**, which stage 2 fills. Stage 1 puts only the meeting logistics page there.
-- **One page answers one question in full.** The reader will open one page, not three.
+- **One page covers one topic in full.** The reader will open one page, not three, so repeat a needed number instead of pointing elsewhere.
+- **Stage 1 summarises; it does not coach.** Pages report what the document says. No question-and-answer layout, no "if asked, say" advice, no remarks on the document's weaknesses. Weaknesses go on the known-weak-points page; prepared answers are written in stage 2.
+- **Headings are plain topic labels** that make sense read alone. Never a bare "Short answer", and no question-form headings on summary pages.
+- **Speaker notes and hidden slides** are part of the source. Keep them visibly apart from what the audience sees, and report a note's "if asked, say X" as what the note says, not as advice.
 - **Every page carries its source pages.** Add a line under `**Sources**` naming the section and the PDF pages, in the format below. See `references/page-numbers.md` for how to build the map first and cite from it.
 - **Quote the document exactly** where wording may be challenged, with the section number beside the quote.
 - **Do not put past-question material into the wiki.** It is read in stage 2 as a guide, never catalogued. Other files are ingested only if the user put them in scope.
@@ -187,7 +190,7 @@ Never copy a past comment into the wiki word for word, and never attach a name o
 
 ### 2. Write the hearing-prep folder
 
-Question pages grouped by the shape of the question, a navigation page for each group, a page for handling proposed additions, and a page of hard questions that challenge the document at its roots. Every answer has a short answer, the evidence with section and page, what to concede if pressed, and a stance.
+Question pages grouped by the shape of the question, a navigation page for each group, a page for handling proposed additions, and a page of hard questions that challenge the document at its roots. Also add, to every item on the known-weak-points page that stage 1 wrote, what to say if someone points at it. Every answer has a short answer, the evidence with section and page, what to concede if pressed, and a stance.
 
 Share the writing between subagents as set out under "Subagents and models".
 
