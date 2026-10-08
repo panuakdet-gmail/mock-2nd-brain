@@ -29,8 +29,7 @@ from scratch.
 | `/mock-export-wiki-as-html` | Turns that wiki into a static website — sidebar, working links, table of contents, light and dark themes, print stylesheet |
 | `/mock-prep-hearing` | Prepares you to answer questions about a document you wrote, such as a curriculum, a framework or a policy paper. It builds the wiki, writes the hard questions with ready answers that cite exact PDF pages, and exports the site |
 
-The `mock-` prefix is just a namespace to keep these apart from other skills; it
-doesn't mean anything.
+The `mock-` prefix is the author's nickname, Mock.
 
 ## What you need
 
