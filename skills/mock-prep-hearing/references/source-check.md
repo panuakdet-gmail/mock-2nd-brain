@@ -2,7 +2,7 @@
 
 This pass checks every citation, one at a time, because the user will read these answers aloud to people who have the document open. Sampling is not enough.
 
-Run it after the prep pages are written, over the whole wiki: stage 1 pages and prep pages alike.
+Run it after the prep pages are written, over the whole wiki: stage 1 pages and prep pages alike. When subagents are on, Opus subagents do sections 1 to 3, each with its own set of wiki pages.
 
 ## 1. Facts
 
@@ -43,9 +43,9 @@ Run these by script and fix every hit:
 - an unescaped `|` inside a wiki-link in a table row;
 - a page missing its summary, sources, source-pages or last-updated line.
 
-## 5. Independent review
+## 5. Final review
 
-Start a fresh agent with the Agent tool: `subagent_type: general-purpose`, `model: fable`, or `opus` if that is not offered. Give it the vault path, the path of the PDF, the text form of the document and this file, and tell it to look at PDF pages with the Read tool's `pages` option. Do not give it your findings or tell it what you expect. Ask it for errors of fact, wrong page numbers, contradictions between pages, and answers a hostile but informed listener could take apart. Fix what it finds, then re-run the mechanical checks.
+Start a fresh agent with the Agent tool: `subagent_type: general-purpose`, `model: opus`, or `model: fable` if the user said OK to the Fable review in the confirmation. This review always runs, even when subagents are off. Give it the vault path, the path of the PDF, the text form of the document and this file, and tell it to look at PDF pages with the Read tool's `pages` option. Do not give it your findings or tell it what you expect. Ask it for errors of fact, wrong page numbers, contradictions between pages, and answers a hostile but informed listener could take apart. Fix what it finds, then re-run the mechanical checks.
 
 ## 6. Record
 

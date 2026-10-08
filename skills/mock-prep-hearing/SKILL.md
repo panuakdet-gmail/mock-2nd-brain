@@ -75,6 +75,8 @@ Show these once, in the stage 1 confirmation, as a short list. The user override
 - **The document is confidential.** Analysing it is fine. Nothing from it goes anywhere public. An unpublished draft is never described as policy in force. Nothing from the document, the wiki, the HTML or `PROMPT_LOG.md` is sent through the Artifact tool, Claude Docs, a connector, a web search or any other upload. The only upload is `publish`, and it uploads only the built site from `html/` and the password gate files, never a source file.
 - **Sources are read in place**, not copied into `raw/`. This answers the copy-or-read question in `mock-wikify`, so do not ask it.
 - **Every prompt is logged.** Each message the user sends in this project is appended word for word to `PROMPT_LOG.md` at the vault root, with the time it was sent, the time the reply finished, the elapsed time, and one line on what was done. Newest at the bottom. The user can turn this off in the confirmation, or later by saying so.
+- **Subagents are on.** Long jobs are shared between subagents, as set out under "Subagents and models" below. The user can turn this off.
+- **Final review by Fable is off.** The final review always runs, and Opus does it. Fable does it only if the user replies OK to this line in the confirmation. Tell the user that Fable gives the most thorough review and costs the most.
 
 ### Prompt log
 
@@ -97,6 +99,19 @@ When logging is on:
 
 - The log sits outside `wiki/`, so the export never includes it. Treat it as confidential, and never copy from it into the wiki.
 - If the user turns logging off, remove the rule from the three files and leave the existing log file alone.
+
+## Subagents and models
+
+A subagent is a separate Claude session that this session starts with the Agent tool to do one part of the job. When subagents are on:
+
+1. **This session does the shared groundwork first, itself:** the section-to-page map and the one-page overview. Give both to every subagent, with the rules in the vault's `AGENTS.md`, so that page numbers and counts agree across pages.
+2. **Opus (`model: opus`) writes all wiki content:** every summary page, the glossary, the bibliography, the question pages, the hard-questions page and the scope page. Opus also does the whole source check, facts and page numbers.
+3. **Sonnet (`model: sonnet`) does only work that needs no interpretation:** the gist card for each source, the router pages, which are tables built from pages Opus has already written, and the entries in `index.md`.
+4. **The final review** is one fresh agent: `model: opus`, or `model: fable` if the user said OK to it.
+
+Give each subagent its own files, so that no two write the same file. This session writes `log.md`, runs the mechanical checks and resolves anything two subagents disagree on.
+
+If the user turned subagents off, this session does all the writing and checking itself. The final review still runs as a fresh agent, because it must not share this session's conclusions.
 
 ## What not to say to the user
 
@@ -128,7 +143,8 @@ Use AskUserQuestion once, and fold in the purpose and taxonomy questions from `m
 
 - the purpose, pre-filled from what you read (who the user is, what meeting, what date);
 - the proposed topic folders;
-- the standing defaults above, shown as a list to confirm, including that every prompt will be logged and that this can be turned off;
+- the standing defaults above, shown as a list to confirm, including that every prompt will be logged, that subagents are on, and that both can be turned off;
+- the Fable final review, which is off unless the user replies OK;
 - which files are in scope;
 - **which PDF the page numbers come from**, only if there is more than one PDF or version. Say why you ask, and list the files by name. For example: "I will take every page number from one PDF, so that the pages I cite match the copy people have in the room. Which file is that copy?";
 - meeting facts you could not find;
@@ -141,6 +157,7 @@ Invoke it with the confirmed purpose and source location as its argument, then f
 - **Its step 3 questions are already answered** by the confirmation round. Do not ask them again, and do not ask whether folders are a sequence: they are always numbered.
 - **Its report step is replaced by the stop below.** Defects in the document go to the known-weak-points page, not to chat.
 - **Past-question material gets no gist card.** Gist cards are for the document and the meeting papers.
+- **Pages are written by subagents**, as set out under "Subagents and models", unless the user turned them off.
 - **Folders follow the document's own chapters**, numbered in reading order. Three things are fixed whatever the document is:
   - a first folder of foundations that opens with a **one-page overview** holding every headline number and structure;
   - a **reference folder** holding a glossary, the **section-to-page map**, and a **known-weak-points page** (errors, inconsistencies and gaps in the document itself, each with what to say if someone points at it);
@@ -172,13 +189,13 @@ Never copy a past comment into the wiki word for word, and never attach a name o
 
 Question pages grouped by the shape of the question, a navigation page for each group, a page for handling proposed additions, and a page of hard questions that challenge the document at its roots. Every answer has a short answer, the evidence with section and page, what to concede if pressed, and a stance.
 
-Subagents may write groups in parallel. Give each one the section-to-page map and the rules in the vault's `AGENTS.md`.
+Share the writing between subagents as set out under "Subagents and models".
 
 ### 3. Check everything against the source
 
 Follow `references/source-check.md` in full. It checks two things for every citation, in the prep pages **and** the stage 1 pages: that the fact is what the document says, and that the page number is the page the text is on. It also finds contradictions between wiki pages and claims that come from somewhere other than the document.
 
-Finish with the independent review described there. Fix what it finds.
+Finish with the final review described there, by Opus or by Fable as the user chose. Fix what it finds.
 
 ### 4. Create `/ask`
 
